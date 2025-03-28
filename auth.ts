@@ -3,7 +3,8 @@ import { PrismaAdapter } from '@auth/prisma-adapter'
 import { prisma } from './db/prisma'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { compare } from 'bcrypt-ts-edge'
-import type { NextAuthConfig } from 'next-auth'
+import { cookies } from 'next/headers'
+import { authConfig } from './auth.config'
 
 export const config = {
 	pages: {
@@ -11,7 +12,7 @@ export const config = {
 		error: '/sign-in',
 	},
 	session: {
-		strategy: 'jwt',
+		strategy: 'jwt' as const,
 		maxAge: 30 * 24 * 60 * 60,
 	},
 	adapter: PrismaAdapter(prisma),
@@ -81,7 +82,8 @@ export const config = {
 
 			return token
 		},
+		...authConfig.callbacks,
 	},
-} satisfies NextAuthConfig
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config)

@@ -18,6 +18,7 @@ const ProductImages = ({ images }: Props) => {
 				width={1000}
 				height={1000}
 				className='min-h-[300px] object-cover object-center'
+				priority={true}
 			/>
 			<div className='flex'>
 				{images.map((image, i) => (
