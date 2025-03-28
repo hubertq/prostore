@@ -1,11 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import '../assets/globals.css'
-import {
-	APP_DESCRIPTION,
-	APP_NAME,
-	SERVER_URL,
-} from '@/lib/constants'
+import { APP_DESCRIPTION, APP_NAME, SERVER_URL } from '@/lib/constants'
 import { ThemeProvider } from '@/components/theme-provider'
 
 const inter = Inter({
@@ -27,11 +23,14 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang='en' suppressHydrationWarning>
+		<html
+			lang='en'
+			suppressHydrationWarning
+		>
 			<body className={`${inter.className} antialiased`}>
 				<ThemeProvider
 					attribute={'class'}
-					defaultTheme='system'
+					defaultTheme='light'
 					enableSystem
 					disableTransitionOnChange
 				>

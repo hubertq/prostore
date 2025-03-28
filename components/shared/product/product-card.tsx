@@ -1,21 +1,29 @@
+'use client'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import Image from 'next/image'
 import Link from 'next/link'
 import ProductPrice from './product-price'
 
 import { Product } from '@/types'
+import { useState } from 'react'
 
 type Props = {
 	product: Product
 }
 
 const ProductCard = ({ product }: Props) => {
+	const [currentImage, setCurrentImage] = useState(product.images[0])
 	return (
-		<Card className='w-full max-w-sm'>
+		<Card className='w-full max-w-sm p-0 relative overflow-hidden'>
 			<CardHeader className='p-0 items-center'>
-				<Link href={`/product/${product.slug}`}>
+				<Link
+					href={`/product/${product.slug}`}
+					className='relative'
+					onMouseEnter={() => setCurrentImage(product.images[1])}
+					onMouseLeave={() => setCurrentImage(product.images[0])}
+				>
 					<Image
-						src={product.images[0]}
+						src={currentImage}
 						alt={product.name}
 						height={300}
 						width={300}
@@ -30,11 +38,7 @@ const ProductCard = ({ product }: Props) => {
 				</Link>
 				<div className='flex-between gap-4'>
 					<p>{product.rating} Stars</p>
-					{product.stock > 0 ? (
-						<ProductPrice value={Number(product.price)} />
-					) : (
-						<p className='text-destructive'>Out Of Stock</p>
-					)}
+					{product.stock > 0 ? <ProductPrice value={Number(product.price)} /> : <p className='text-destructive'>Out Of Stock</p>}
 				</div>
 			</CardContent>
 		</Card>

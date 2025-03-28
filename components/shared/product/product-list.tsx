@@ -13,9 +13,12 @@ const ProductList = ({ data, title, limit }: Props) => {
 		<div className='my-10'>
 			<h2 className='h2-bold mb-4'>{title}</h2>
 			{data.length > 0 ? (
-				<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+				<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4'>
 					{limitedData.map((product: Product) => (
-						<ProductCard key={product.slug} product={product} />
+						<ProductCard
+							key={product.slug}
+							product={product}
+						/>
 					))}
 				</div>
 			) : (
