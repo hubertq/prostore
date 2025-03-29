@@ -70,7 +70,7 @@ export async function addItemToCart(data: CartItem) {
 			}
 		} else {
 			// Check if item is already in cart
-			let existItem = (cart.items as CartItem[]).find(x => x.productId === item.productId)
+			const existItem = (cart.items as CartItem[]).find(x => x.productId === item.productId)
 
 			if (existItem) {
 				// Check stock
