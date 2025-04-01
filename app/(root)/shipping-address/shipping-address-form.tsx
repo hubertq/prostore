@@ -2,23 +2,25 @@
 
 import { shippingAddressSchema } from '@/lib/validators'
 import { ShippingAddress } from '@/types'
-// import { useRouter } from 'next/navigation'
-// import { useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ControllerRenderProps, useForm } from 'react-hook-form'
+import { ControllerRenderProps, useForm, SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { shippingAddressDefaultValues } from '@/lib/constants'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-// import { Button } from '@/components/ui/button'
-// import { ArrowRight, Loader } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { ArrowRight, Loader } from 'lucide-react'
+import { updateUserAddress } from '@/lib/actions/user.actions'
+import { toast } from 'sonner'
 
 type Props = {
 	address: ShippingAddress
 }
 const ShippingAddressForm = ({ address }: Props) => {
-	// const router = useRouter()
-	// const [isPending, startTransition] = useTransition()
+	const router = useRouter()
+	const [isPending, startTransition] = useTransition()
 
 	const form = useForm<z.infer<typeof shippingAddressSchema>>({
 		resolver: zodResolver(shippingAddressSchema),
@@ -26,8 +28,19 @@ const ShippingAddressForm = ({ address }: Props) => {
 		defaultValues: address || shippingAddressDefaultValues,
 	})
 
-	const onSubmit = () => {
-		return
+	const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = async values => {
+		startTransition(async () => {
+			const res = await updateUserAddress(values)
+
+			if (!res.success) {
+				toast.error('Submission failed.', {
+					description: res.message,
+				})
+				return
+			}
+
+			router.push('/payment-method')
+		})
 	}
 
 	return (
@@ -132,12 +145,12 @@ const ShippingAddressForm = ({ address }: Props) => {
 							/>
 						</div>
 						<div className='flex gap-2'>
-							{/* <Button
+							<Button
 								type='submit'
 								disabled={isPending}
 							>
 								{isPending ? <Loader className='w-4 h-4 animate-spin' /> : <ArrowRight className='w-4 h-4' />} Continue
-							</Button> */}
+							</Button>
 						</div>
 					</form>
 				</Form>

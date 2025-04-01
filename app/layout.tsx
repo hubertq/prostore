@@ -17,7 +17,6 @@ export const metadata: Metadata = {
 	description: APP_DESCRIPTION,
 	metadataBase: new URL(SERVER_URL),
 }
-
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -28,7 +27,10 @@ export default function RootLayout({
 			lang='en'
 			suppressHydrationWarning
 		>
-			<body className={`${inter.className} antialiased`}>
+			<body
+				className={`${inter.className} antialiased`}
+				suppressHydrationWarning
+			>
 				<ThemeProvider
 					attribute={'class'}
 					defaultTheme='light'

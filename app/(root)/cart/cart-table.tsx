@@ -54,8 +54,10 @@ const CartTable = ({ cart }: Props) => {
 												<span className='px-2'>{item.name}</span>
 											</Link>
 										</TableCell>
-										<TableCell className='flex-center gap-2'>
+										<TableCell className='flex-center'>
 											<Button
+												size={'icon'}
+												className='rounded-full'
 												disabled={isPending}
 												variant={'outline'}
 												type='button'
@@ -72,8 +74,10 @@ const CartTable = ({ cart }: Props) => {
 											>
 												{isPending ? <Loader className='w-4 h-4 animate-spin' /> : <Minus className='w-4 h-4' />}
 											</Button>
-											<span>{item.qty}</span>
+											<span className='px-4'>{item.qty}</span>
 											<Button
+												size={'icon'}
+												className='rounded-full'
 												disabled={isPending}
 												variant={'outline'}
 												type='button'

@@ -12,6 +12,7 @@ type Props = {
 	cart?: Cart
 	item: CartItem
 }
+
 const AddToCart = ({ cart, item }: Props) => {
 	const router = useRouter()
 	const [isPending, startTransition] = useTransition()
@@ -65,16 +66,20 @@ const AddToCart = ({ cart, item }: Props) => {
 		<div>
 			<Button
 				type='button'
+				size={'icon'}
 				variant={'outline'}
 				onClick={handleRemoveFromCart}
+				className='rounded-full'
 			>
 				{isPending ? <Loader className='w-4 h-4 animate-spin' /> : <Minus className='h-4 w-4' />}
 			</Button>
-			<span className='px-2'>{existItem.qty}</span>
+			<span className='px-4'>{existItem.qty}</span>
 			<Button
 				type='button'
+				size={'icon'}
 				variant={'outline'}
 				onClick={handleAddToCart}
+				className='rounded-full'
 			>
 				{isPending ? <Loader className='w-4 h-4 animate-spin' /> : <Plus className='h-4 w-4' />}
 			</Button>
