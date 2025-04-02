@@ -17,7 +17,7 @@ import { z } from 'zod'
 type Props = {
 	preferredPaymentMethod: string | null
 }
-useTransition
+
 const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
 	const router = useRouter()
 
