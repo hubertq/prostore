@@ -13,7 +13,6 @@ const PlaceOrderForm = () => {
 		e.preventDefault()
 
 		const res = await createOrder()
-
 		if (res.redirectTo) {
 			router.push(res.redirectTo)
 		}
