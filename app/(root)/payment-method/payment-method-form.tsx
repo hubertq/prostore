@@ -38,7 +38,7 @@ const PaymentMethodForm = ({ preferredPaymentMethod }: Props) => {
 				toast.error('Action failed', {
 					description: res.message,
 				})
-				console.log('failed')
+
 				return
 			}
 
