@@ -27,7 +27,7 @@ export async function signInWithCredentials(prevState: unknown, formData: FormDa
 
 // Sign user out
 export async function signOutOutUser() {
-	await signOut()
+	await signOut({ redirectTo: '/sign-in' })
 }
 
 // Sign up user
