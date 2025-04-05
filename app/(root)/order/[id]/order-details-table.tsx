@@ -7,15 +7,18 @@ import { Order } from '@/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from '@paypal/react-paypal-js'
-import { approvePayPalOrder, createPayPalOrder } from '@/lib/actions/order.actions'
+import { approvePayPalOrder, createPayPalOrder, deliverOrder, updateOrderToPaidCOD } from '@/lib/actions/order.actions'
 import { toast } from 'sonner'
+import { useTransition } from 'react'
+import { Button } from '@/components/ui/button'
 
 type Props = {
 	order: Omit<Order, 'paymentResult'>
 	paypalClientId: string
+	isAdmin: boolean
 }
 
-const OrderDetailsTable = ({ order, paypalClientId }: Props) => {
+const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 	const { id, shippingAddress, orderitems, itemsPrice, shippingPrice, taxPrice, totalPrice, paymentMethod, isPaid, isDelivered, paidAt, deliveredAt } =
 		order
 
@@ -56,6 +59,52 @@ const OrderDetailsTable = ({ order, paypalClientId }: Props) => {
 				description: res.message,
 			})
 		}
+	}
+
+	//  Button to mark order as paid
+	const MarkAsPaidButton = () => {
+		const [isPending, startTransition] = useTransition()
+		return (
+			<Button
+				type='button'
+				disabled={isPending}
+				onClick={() =>
+					startTransition(async () => {
+						const res = await updateOrderToPaidCOD(order.id)
+						if (res.success) {
+							toast.success('Operation success', { description: res.message })
+						} else {
+							toast.error('Operation failed', { description: res.message })
+						}
+					})
+				}
+			>
+				{isPending ? 'processing...' : 'Mark As Paid'}
+			</Button>
+		)
+	}
+
+	//  Button to mark order as delivered
+	const MarkAsDeliveredButton = () => {
+		const [isPending, startTransition] = useTransition()
+		return (
+			<Button
+				type='button'
+				disabled={isPending}
+				onClick={() =>
+					startTransition(async () => {
+						const res = await deliverOrder(order.id)
+						if (res.success) {
+							toast.success('Operation success', { description: res.message })
+						} else {
+							toast.error('Operation failed', { description: res.message })
+						}
+					})
+				}
+			>
+				{isPending ? 'processing...' : 'Mark As Delivered'}
+			</Button>
+		)
 	}
 	return (
 		<>
@@ -155,6 +204,9 @@ const OrderDetailsTable = ({ order, paypalClientId }: Props) => {
 									</PayPalScriptProvider>
 								</div>
 							)}
+							{/* Cash On Delivery */}
+							{isAdmin && !isPaid && paymentMethod === 'CashOnDelivery' && <MarkAsPaidButton />}
+							{isAdmin && isPaid && !isDelivered && <MarkAsDeliveredButton />}
 						</CardContent>
 					</Card>
 				</div>
