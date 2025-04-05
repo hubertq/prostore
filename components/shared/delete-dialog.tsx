@@ -51,7 +51,7 @@ const DeleteDialog = ({ id, action }: Props) => {
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-					<AlertDialogDescription>This action can't be undone</AlertDialogDescription>
+					<AlertDialogDescription>This action can&apos;t be undone</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
 					<AlertDialogCancel>Cancel</AlertDialogCancel>
