@@ -36,11 +36,11 @@ export const getProductById = async (productId: string) => {
 
 // Get all products
 export const getAllProducts = async ({
-	query,
+	// query,
 	limit = PAGE_SIZE,
 	page,
-	category,
-}: {
+}: // category,
+{
 	query: string
 	limit?: number
 	page: number

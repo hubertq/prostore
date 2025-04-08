@@ -5,7 +5,6 @@ import Link from 'next/link'
 import ProductPrice from './product-price'
 
 import { Product } from '@/types'
-import { useState } from 'react'
 
 type Props = {
 	product: Product
