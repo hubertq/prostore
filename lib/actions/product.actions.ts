@@ -6,7 +6,7 @@ import { prisma } from '@/db/prisma'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { insertProductSchema, updateProductSchema } from '../validators'
-import { utapi } from '@/app/api/uploadthing/core'
+import { deleteImages } from './image.actions'
 
 // Get latest products
 export const getLatestProducts = async () => {
@@ -75,7 +75,7 @@ export const deleteProduct = async (id: string) => {
 		}
 		const imageKeys = imagesToBeDeleted.map(image => image.split('/').pop())
 
-		await utapi.deleteFiles(imageKeys as string[])
+		await deleteImages(imageKeys as string[])
 
 		await prisma.product.delete({ where: { id } })
 

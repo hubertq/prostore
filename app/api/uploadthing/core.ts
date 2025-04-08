@@ -1,5 +1,5 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
-import { UploadThingError, UTApi } from 'uploadthing/server'
+import { UploadThingError } from 'uploadthing/server'
 import { auth } from '@/auth'
 
 const f = createUploadthing()
@@ -20,5 +20,4 @@ export const ourFileRouter = {
 		}),
 } satisfies FileRouter
 
-export const utapi = new UTApi()
 export type OurFileRouter = typeof ourFileRouter
