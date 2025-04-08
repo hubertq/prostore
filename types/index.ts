@@ -8,7 +8,7 @@ import {
 	paymentResultSchema,
 	updateProfileSchema,
 } from '@/lib/validators'
-import { string, z } from 'zod'
+import { z } from 'zod'
 
 export type Product = z.infer<typeof insertProductSchema> & {
 	id: string

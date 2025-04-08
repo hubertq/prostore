@@ -26,11 +26,11 @@ const OrdersPage = async ({ searchParams }: Props) => {
 					<TableHeader>
 						<TableRow>
 							<TableHead>ID</TableHead>
-							<TableHead>DATE</TableHead>
-							<TableHead>TOTAL</TableHead>
-							<TableHead>PAID</TableHead>
-							<TableHead>DELIVERED</TableHead>
-							<TableHead>ACTIONS</TableHead>
+							<TableHead>Date</TableHead>
+							<TableHead>Total</TableHead>
+							<TableHead>Paid</TableHead>
+							<TableHead>Delivered</TableHead>
+							<TableHead>Actions</TableHead>
 						</TableRow>
 					</TableHeader>
 					<TableBody>

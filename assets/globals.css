@@ -152,8 +152,10 @@
 /* Uploadthing button text override */
 html.dark .upload-field .text-white {
 	color: #ffffff !important;
+	font-size: 14;
 }
 
 .upload-field .text-white {
 	color: #000 !important;
+	font-size: 14;
 }

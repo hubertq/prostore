@@ -12,18 +12,15 @@ type Props = {
 }
 
 const ProductCard = ({ product }: Props) => {
-	const [currentImage, setCurrentImage] = useState(product.images[0])
 	return (
 		<Card className='w-full max-w-sm p-0 relative overflow-hidden'>
 			<CardHeader className='p-0 items-center'>
 				<Link
 					href={`/product/${product.slug}`}
 					className='relative'
-					onMouseEnter={() => setCurrentImage(product.images[1])}
-					onMouseLeave={() => setCurrentImage(product.images[0])}
 				>
 					<Image
-						src={currentImage}
+						src={product.images[0]}
 						alt={product.name}
 						height={300}
 						width={300}

@@ -1,6 +1,6 @@
 'use client'
 import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils'
 import { Order } from '@/types'
@@ -67,6 +67,7 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 		return (
 			<Button
 				type='button'
+				className='w-full'
 				disabled={isPending}
 				onClick={() =>
 					startTransition(async () => {
@@ -90,6 +91,7 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 		return (
 			<Button
 				type='button'
+				className='w-full'
 				disabled={isPending}
 				onClick={() =>
 					startTransition(async () => {
@@ -109,32 +111,42 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 	return (
 		<>
 			<h1 className='py-4 text-2xl'>Order {formatId(id)}</h1>
-			<div className='grid md:grid-cols-3 md:gap-5'>
-				<div className='col-span-2 space-y-3 overflow-x-auto'>
-					<Card>
-						<CardContent className='p-4 gap-4'>
-							<h2 className='text-xl pb-4'>Payment Method</h2>
-							<p className='mb-2'>{paymentMethod}</p>
-							{isPaid ? <Badge variant={'secondary'}>Paid at {formatDateTime(paidAt!).dateTime}</Badge> : <Badge variant={'destructive'}>Not paid</Badge>}
+			<div className='grid md:grid-cols-3 gap-3'>
+				<div className='col-span-3 md:col-span-2 space-y-3 overflow-x-auto'>
+					<Card className='gap-0'>
+						<CardHeader>
+							<CardTitle>Payment Method</CardTitle>
+						</CardHeader>
+						<CardContent className='px-6 my-3 text-sm'>
+							<p>{paymentMethod}</p>
 						</CardContent>
+						<CardFooter>
+							{isPaid ? <Badge variant={'secondary'}>Paid at {formatDateTime(paidAt!).dateTime}</Badge> : <Badge variant={'destructive'}>Not paid</Badge>}
+						</CardFooter>
 					</Card>
-					<Card>
-						<CardContent className='p-4 gap-4'>
-							<h2 className='text-xl pb-4'>Shipping Address</h2>
+					<Card className='gap-0'>
+						<CardHeader>
+							<CardTitle>Shipping Address</CardTitle>
+						</CardHeader>
+						<CardContent className='px-6 my-3 text-sm'>
 							<p>{shippingAddress.fullName}</p>
 							<p className='mb-2'>
 								{shippingAddress.streetAddress}, {shippingAddress.city},{shippingAddress.postalCode}, {shippingAddress.country}
 							</p>
+						</CardContent>
+						<CardFooter>
 							{isDelivered ? (
 								<Badge variant={'secondary'}>Delivered at {formatDateTime(deliveredAt!).dateTime}</Badge>
 							) : (
 								<Badge variant={'destructive'}>Not delivered</Badge>
 							)}
-						</CardContent>
+						</CardFooter>
 					</Card>
-					<Card>
-						<CardContent className='p-4 gap-4'>
-							<h2 className='text-xl pb-4'>Order Items</h2>
+					<Card className='gap-0'>
+						<CardHeader>
+							<CardTitle>Order Items</CardTitle>
+						</CardHeader>
+						<CardContent className='px-6 my-3 text-sm'>
 							<Table>
 								<TableHeader>
 									<TableRow>
@@ -172,9 +184,12 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 					</Card>
 				</div>
 
-				<div>
-					<Card>
-						<CardContent className='p-4 gap-4 space-y-4'>
+				<div className='col-span-3 md:col-span-1'>
+					<Card className='gap-0'>
+						<CardHeader>
+							<CardTitle>Summary</CardTitle>
+						</CardHeader>
+						<CardContent className='px-6 mt-3 text-sm space-y-2'>
 							<div className='flex justify-between'>
 								<div>Items</div>
 								<div>{formatCurrency(itemsPrice)}</div>
@@ -191,23 +206,29 @@ const OrderDetailsTable = ({ order, paypalClientId, isAdmin }: Props) => {
 								<div>Total</div>
 								<div>{formatCurrency(totalPrice)}</div>
 							</div>
-
-							{/* PayPal Payment */}
-							{!isPaid && paymentMethod === 'PayPal' && (
-								<div>
-									<PayPalScriptProvider options={{ clientId: paypalClientId }}>
-										<PrintLoadingState />
-										<PayPalButtons
-											createOrder={handleCreatePayPalOrder}
-											onApprove={handleApprovePayPalOrder}
-										/>
-									</PayPalScriptProvider>
-								</div>
-							)}
-							{/* Cash On Delivery */}
-							{isAdmin && !isPaid && paymentMethod === 'CashOnDelivery' && <MarkAsPaidButton />}
-							{isAdmin && isPaid && !isDelivered && <MarkAsDeliveredButton />}
 						</CardContent>
+						{(!isPaid || !isDelivered) && (
+							<CardFooter className='mt-8'>
+								{/* PayPal Payment */}
+								{!isPaid && paymentMethod === 'PayPal' && (
+									<div
+										className='w-full'
+										style={{ colorScheme: 'none' }}
+									>
+										<PayPalScriptProvider options={{ clientId: paypalClientId }}>
+											<PrintLoadingState />
+											<PayPalButtons
+												createOrder={handleCreatePayPalOrder}
+												onApprove={handleApprovePayPalOrder}
+											/>
+										</PayPalScriptProvider>
+									</div>
+								)}
+								{/* Cash On Delivery */}
+								{isAdmin && !isPaid && paymentMethod === 'CashOnDelivery' && <MarkAsPaidButton />}
+								{isAdmin && isPaid && !isDelivered && <MarkAsDeliveredButton />}
+							</CardFooter>
+						)}
 					</Card>
 				</div>
 			</div>

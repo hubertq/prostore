@@ -10,6 +10,7 @@ type Props = {
 
 const ProductImages = ({ images }: Props) => {
 	const [current, setCurrent] = useState(0)
+
 	return (
 		<div className='space-y-4'>
 			<Image
