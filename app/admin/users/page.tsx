@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { deleteUser, getAllUsers } from '@/lib/actions/user.actions'
+import { requiredAdmin } from '@/lib/auth-guard'
 import { formatId } from '@/lib/utils'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -13,16 +14,31 @@ export const metadata: Metadata = {
 }
 
 type Props = {
-	searchParams: Promise<{ page: string }>
+	searchParams: Promise<{ page: string; query: string }>
 }
 const UsersPages = async ({ searchParams }: Props) => {
-	const { page = '1' } = await searchParams
+	await requiredAdmin()
+	const { page = '1', query: searchText } = await searchParams
 
-	const users = await getAllUsers({ page: Number(page) })
+	const users = await getAllUsers({ page: Number(page), query: searchText })
 
 	return (
 		<div className='space-y-2'>
-			<h2 className='h2-bold'>Users</h2>
+			<div className='flex items-center gap-3'>
+				<h1 className='h2-bold'>Users</h1>
+				{searchText && (
+					<div>
+						Filtered by <i>&quot;{searchText}&quot;</i>{' '}
+						<Button
+							asChild
+							variant={'outline'}
+							size={'sm'}
+						>
+							<Link href={'/admin/users'}>Remove Filter</Link>
+						</Button>
+					</div>
+				)}
+			</div>
 			<div className='overflow-x-auto'>
 				<Table>
 					<TableHeader>

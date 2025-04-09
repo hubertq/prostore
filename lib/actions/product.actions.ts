@@ -7,6 +7,7 @@ import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { insertProductSchema, updateProductSchema } from '../validators'
 import { deleteImages } from './image.actions'
+import { Prisma } from '@prisma/client'
 
 // Get latest products
 export const getLatestProducts = async () => {
@@ -35,18 +36,21 @@ export const getProductById = async (productId: string) => {
 }
 
 // Get all products
-export const getAllProducts = async ({
-	// query,
-	limit = PAGE_SIZE,
-	page,
-}: // category,
-{
-	query: string
-	limit?: number
-	page: number
-	category?: string
-}) => {
+export const getAllProducts = async ({ query, limit = PAGE_SIZE, page }: { query: string; limit?: number; page: number; category?: string }) => {
+	const queryFilter: Prisma.ProductWhereInput =
+		query && query !== 'all'
+			? {
+					name: {
+						contains: query,
+						mode: 'insensitive',
+					} as Prisma.StringFilter,
+			  }
+			: {}
+
 	const data = await prisma.product.findMany({
+		where: {
+			...queryFilter,
+		},
 		orderBy: { createdAt: 'desc' },
 		skip: (page - 1) * limit,
 		take: limit,

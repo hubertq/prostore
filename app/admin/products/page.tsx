@@ -3,6 +3,7 @@ import Pagination from '@/components/shared/pagination'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getAllProducts, deleteProduct } from '@/lib/actions/product.actions'
+import { requiredAdmin } from '@/lib/auth-guard'
 import { formatCurrency, formatId } from '@/lib/utils'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -15,6 +16,7 @@ type Props = {
 	searchParams: Promise<{ page: string; query: string; category: string }>
 }
 const ProductsPage = async ({ searchParams }: Props) => {
+	await requiredAdmin()
 	const params = await searchParams
 
 	const page = Number(params.page) || 1
@@ -26,7 +28,21 @@ const ProductsPage = async ({ searchParams }: Props) => {
 	return (
 		<div className='space-y-2'>
 			<div className='flex-between'>
-				<h1 className='h2-bold'>Products</h1>
+				<div className='flex items-center gap-3'>
+					<h1 className='h2-bold'>Products</h1>
+					{searchText && (
+						<div>
+							Filtered by <i>&quot;{searchText}&quot;</i>{' '}
+							<Button
+								asChild
+								variant={'outline'}
+								size={'sm'}
+							>
+								<Link href={'/admin/products'}>Remove Filter</Link>
+							</Button>
+						</div>
+					)}
+				</div>
 				<Button
 					asChild
 					variant={'default'}

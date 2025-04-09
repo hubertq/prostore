@@ -22,6 +22,8 @@ const ShippingAddressPage = async () => {
 	if (!userId) throw new Error('No user ID')
 
 	const user = await getUserById(userId)
+
+	if (!user) throw new Error('User not found')
 	return (
 		<>
 			<CheckoutSteps current={1} />
