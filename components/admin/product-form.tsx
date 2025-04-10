@@ -223,6 +223,15 @@ const ProductForm = ({ type, product, productId }: Props) => {
 								<FormLabel>Images</FormLabel>
 								<Card className='p-0 pt-2'>
 									<CardContent className='space-y-2 min-h-48'>
+										{/* <UploadDropzone
+											endpoint={'imageUploader'}
+											onClientUploadComplete={(res: { url: string }[]) => {
+												form.setValue('images', [...images, res[0].url])
+											}}
+											onUploadError={(error: Error) => {
+												toast.error('Operation failed', { description: `Error! ${error.message}` })
+											}}
+										/> */}
 										<div className='flex-start space-x-2'>
 											{images.map((image: string) => (
 												<div
@@ -252,7 +261,8 @@ const ProductForm = ({ type, product, productId }: Props) => {
 												<UploadButton
 													endpoint={'imageUploader'}
 													onClientUploadComplete={(res: { url: string }[]) => {
-														form.setValue('images', [...images, res[0].url])
+														const uploadedImages: string[] = res.map(image => image.url)
+														form.setValue('images', [...images, ...uploadedImages])
 													}}
 													onUploadError={(error: Error) => {
 														toast.error('Operation failed', { description: `Error! ${error.message}` })
